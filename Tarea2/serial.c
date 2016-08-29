@@ -6,12 +6,12 @@
 
 void suma(int* a,  int* b){
     int i = 0;
+    int j = 0;
     for(;i<N;i++)
-        a[i] = a[i] + b[i];
+        a[i] = a[j] + b[i];
 }
 
 int main(){
-
     clock_t begin1 = clock();
 
     int* a;
