@@ -16,8 +16,8 @@
 
 #include <stdio.h>
 
-#define N   500000
-#define M   50000000
+#define M   500000000
+#define N   M/100
 
 __global__ void add( int *a, int *b, int *c) {
    int tid = blockIdx.x * blockDim.x + threadIdx.x;
@@ -78,8 +78,8 @@ int main( void ) {
    free(b);
    free(c);
 
-   printf("Tiempo cálculo %f ms\n", tiempo2);
-   printf("Tiempo total %f ms\n", tiempo1);
+   printf("%f\t%f\tms\n", tiempo2, tiempo1);
+   //printf("Tiempo total %f ms\n", tiempo1);
 
    return 0;
 }

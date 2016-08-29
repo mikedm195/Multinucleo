@@ -4,8 +4,9 @@
 /* how large can it be? */
 //#define N 50000000
 //#define THREADS_PER_BLOCK 25000000
-#define N 500000000
-#define THREADS_PER_BLOCK 250000000
+#define N 1000000
+#define THREADS_PER_BLOCK 48
+#define Blocks 2
 
 __global__ void add(int *a, int *b, int *c)
 {
@@ -49,9 +50,10 @@ int main()
    cudaEventCreate(&inicio2); // Se inicializan
    cudaEventCreate(&fin2);
    cudaEventRecord( inicio2, 0 ); // Se toma el tiempo de inicio
+   int k = N/(Blocks * THREADS_PER_BLOCK);
 
    /* launch the kernel on the GPU */
-   add<<< N / THREADS_PER_BLOCK, THREADS_PER_BLOCK >>>( d_a, d_b, d_c );
+   add<<< k*Blocks, THREADS_PER_BLOCK*k >>>( d_a, d_b, d_c );
 
    cudaEventRecord( fin2, 0); // Se toma el tiempo final.
    cudaEventSynchronize( fin2 ); // Se sincroniza
@@ -78,8 +80,8 @@ int main()
    free(b);
    free(c);
 
-   printf("Tiempo cálculo %f ms\n", tiempo2);
-   printf("Tiempo total %f ms\n", tiempo1);
+   printf("%f\t%f\tms\n", tiempo2, tiempo1);
+   //printf("Tiempo total %f ms\n", tiempo1);
 
    return 0;
 } /* end main */

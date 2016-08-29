@@ -2,21 +2,21 @@
 #include <stdlib.h>
 #include <omp.h>
 
-#define N 50000000
+#define N 500000000
 
 int main(int argc, const char * argv[]) {
 
     int i;
     int suma = 0;
-    double total, operaciones, fin;
+    double inicio, operaciones, total;
 
-    total = omp_get_wtime();
 
     int* a;
     int* b;
 
     a = (int*)malloc(N*sizeof(int));
     b = (int*)malloc(N*sizeof(int));
+
 
     i = 0;
     #pragma omp parallel private(i)
@@ -28,7 +28,7 @@ int main(int argc, const char * argv[]) {
         }
     }
 
-    operaciones = omp_get_wtime();
+    inicio = omp_get_wtime();
 
     i = 0;
     #pragma omp parallel private(i) reduction(+:suma)
@@ -39,13 +39,14 @@ int main(int argc, const char * argv[]) {
         }
     }
 
-    fin = omp_get_wtime();
-
-    printf("Tiempo total = %f \n", fin-total);
-    printf("Tiempo operaciones = %f \n", fin-operaciones);
+    operaciones = omp_get_wtime();
 
     free(a);
     free(b);
 
+    total = omp_get_wtime();
+
+    printf("%f\t%f\ts\n", operaciones-inicio, total-inicio);
+    //printf("Tiempo operaciones = %f \n", fin-operaciones);
     return 0;
 }
